@@ -1,11 +1,11 @@
+import { readFileSync } from "node:fs";
 import { Identifier } from "./identifier";
 
 export default async function Home() {
   let hskword = [];
 
-  const fetchHSKWord = async () => {
-    const csvFile = await fetch("http://localhost:3000/hskwordv2.csv");
-    const hskText = await csvFile.text();
+  const fetchHSKWord = () => {
+    const hskText = readFileSync("public/hskwordv2.csv", "utf8");
     const linesHSK = hskText.match(/[^\n]+/g);
     for (const line of linesHSK) {
       hskword.push(line.split(','));
@@ -19,13 +19,8 @@ export default async function Home() {
     });
   };
   
-  const fetchSong = async () => {
-    const songFile = await fetch("http://localhost:3000/Gloria.txt");
-    return await songFile.text();
-  };
-  
-  await fetchHSKWord();
-  const songText = await fetchSong();
+  fetchHSKWord();
+  const songText = readFileSync("public/Gloria.txt", "utf8");
 
   return (<>
     <main>
